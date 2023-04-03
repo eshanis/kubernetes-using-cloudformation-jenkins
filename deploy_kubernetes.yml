@@ -1,0 +1,40 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  eksclustername:
+    Type: String
+    Default: cluster-name
+    Description: Name of the EKS cluster.
+  eksversion:
+    Type: String
+    Default: '1.21'
+Resources:
+  EKSCluster:
+    Type: AWS::EKS::Cluster
+    Properties:
+      Name:
+        Ref: eksclustername
+      Version:
+        Ref: eksversion
+      RoleArn: Type-EKS CLuster Role ARN
+      ResourcesVpcConfig:
+        SecurityGroupIds:
+        - sg-06c82622fee88fde8
+        SubnetIds:
+        - subnet-91e949f4
+        - subnet-f4a06483
+        EndpointPublicAccess: false
+        EndpointPrivateAccess: true
+      Logging:
+        ClusterLogging:
+          EnabledTypes:
+          - Type: api
+          - Type: audit
+Outputs:
+  eksclustername:
+    Value:
+      Ref: EKSCluster
+    Description: Name of the Eks cluster
+    Export:
+      Name:
+        Fn::Sub: "${AWS::StackName}-eksclustername"
